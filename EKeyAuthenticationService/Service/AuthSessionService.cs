@@ -54,8 +54,12 @@ namespace EKeyAuthenticationService.Service
         }
         public async Task<AuthSessionModel?> GetAuthSessionAsync(Guid state)
         {
+            //AuthSessionModel authSession = new();
+            //authSession.CodeVerifier = "sj99JvlSOWx03B2LIV7MlPLuXhDsnl1_h-mYZEF5o8g";
+
+            //return authSession;
             return await _dbContext.AuthSessions
-                .FirstOrDefaultAsync(s => s.State == state && s.ExpirationTime > DateTime.UtcNow);
+            .FirstOrDefaultAsync(s => s.State == state && s.ExpirationTime > DateTime.UtcNow);
         }
 
         public async Task UpdateAuthSessionAsync(Guid sessionId, string accessToken, string userInfo)
