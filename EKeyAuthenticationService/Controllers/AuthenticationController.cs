@@ -40,89 +40,8 @@ namespace EKeyAuthenticationService.Controllers
             return Ok(new { loginUrl });
         }
 
-        [HttpPost("loginForApex")]
-        public async Task<IActionResult> loginForApex([FromBody] ApexLoginParameters model)
-        {
-            if (string.IsNullOrEmpty(model.RedirectUrl))
-                return BadRequest("Redirect URL is required");
-
-            _logger.LogInformation("Initiating login process. Redirect URL: {RedirectUrl}", model.RedirectUrl);
-
-            var allowedRedirects = _configuration.GetSection("AllowedRedirectUrls").Get<List<string>>();
-            if (!allowedRedirects!.Contains(model.RedirectUrl))
-            {
-                _logger.LogWarning("Invalid Redirect URL: {RedirectUrl}", model.RedirectUrl);
-                return BadRequest("Invalid redirect URL");
-            }
-
-            var redirectUrl = $"{model.RedirectUrl}/f?p={model.AppId}:{model.PageId}:{model.AppSessionId}::::auth,sessionId";
-
-
-            var loginUrl = await _authService.GetLoginUrl(redirectUrl);
-            return Ok(new { loginUrl });
-        }
 
         // Step 2: OIDC provider redirects here after authentication
-        //[HttpGet("callback")]
-        //public async Task<IActionResult> Callback([FromQuery] string code, [FromQuery] string state)
-        //{
-
-        //    _logger.LogInformation("Received callback with state: {State}", state);
-
-        //    if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(state))
-        //        return BadRequest("Invalid authorization response");
-
-        //    var session = await _authSessionService.GetAuthSessionAsync(Guid.Parse(state));
-        //    if (session == null)
-        //    {
-        //        _logger.LogWarning("Invalid session or expired for state: {State}", state);
-        //        return BadRequest("Invalid session or expired.");
-        //    }
-
-        //    var userInfo = await _authService.ExchangeTokenAndGetUserInfo(code, session.CodeVerifier, session.SessionId);
-        //    if (userInfo == null)
-        //        return Unauthorized("Failed to fetch user details");
-
-        //    // Redirect user back to the client application
-
-        //    if (session.RedirectUrl.Contains("f?p="))
-        //    {
-        //        var redirectUrl = $"{session.RedirectUrl}:success,{session.SessionId}";  //+= $"&auth=success&sessionId={session.SessionId}&AccessToken={session.AccessToken}";
-        //        return Redirect(redirectUrl);
-        //    }
-        //    else
-        //    {
-        //        string clientRedirectUrl = $"{session.RedirectUrl}?auth=success&sessionId={session.SessionId}&AccessToken={session.AccessToken}";
-        //        return Redirect(clientRedirectUrl);
-        //    }
-
-
-        //}
-
-
-        //// Step 1: Get the Login URL
-        //[HttpGet("login")]
-        //public async Task<IActionResult> Login([FromQuery] string redirectUrl, [FromQuery] string? lang="en")
-        //{
-        //    if (string.IsNullOrEmpty(redirectUrl))
-        //        return BadRequest("Redirect URL is required");
-
-        //    _logger.LogInformation("Initiating login process. Redirect URL: {RedirectUrl}", redirectUrl);
-
-        //    var allowedRedirects = _configuration.GetSection("AllowedRedirectUrls").Get<List<string>>();
-        //    if (!allowedRedirects!.Contains(redirectUrl))
-        //    {
-        //        _logger.LogWarning("Invalid Redirect URL: {RedirectUrl}", redirectUrl);
-        //        return BadRequest("Invalid redirect URL");
-        //    }
-
-        //    var loginUrl = await _authService.GetLoginUrl(redirectUrl,lang);
-        //    return Ok(new { loginUrl });
-        //}
-
-        // Step 2: OIDC provider redirects here after authentication
-
-
         [HttpGet("callback")]
         public async Task<IActionResult> Callback([FromQuery] string state, [FromQuery] string? code = null, [FromQuery] string? error = null, [FromQuery] string? error_description = null)
         {

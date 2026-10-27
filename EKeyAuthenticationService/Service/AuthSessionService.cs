@@ -19,8 +19,8 @@ namespace EKeyAuthenticationService.Service
                 IsActive=true,
                 ExpirationTime = DateTime.UtcNow.AddMinutes(30)
             };
-            _dbContext.AuthSessions.Add(session);
-            await _dbContext.SaveChangesAsync();
+            //_dbContext.AuthSessions.Add(session);
+            //await _dbContext.SaveChangesAsync();
 
             _logger.LogInformation("Stored auth session: {SessionId} for state: {State} with redirect URL: {RedirectUrl}", session.SessionId, state, redirectUrl);
 
