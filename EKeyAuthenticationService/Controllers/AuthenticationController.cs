@@ -92,7 +92,7 @@ namespace EKeyAuthenticationService.Controllers
                     {
                         var redirectUrl = $"{session.RedirectUrl}:token_exchange_failed,{session.SessionId}";
                         return Redirect(redirectUrl);
-                    }
+                    } 
                     else
                     {
                         string redirectToClient = $"{session.RedirectUrl}?auth=failed&sessionId={session.SessionId}&error_description=token_exchange_failed";
