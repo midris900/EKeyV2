@@ -100,7 +100,7 @@ namespace EKeyAuthenticationService.Service
                 { "code", code },
                 { "client_id", clientId! },
                 { "client_secret", clientSecret! },
-                 { "redirect_uri", redirectUri! },
+                 //{ "redirect_uri", redirectUri! },
                 { "code_verifier", codeVerifier }
         };
             _logger.LogInformation("Initiating Token Exchange: {SessionId}", sessionId);
